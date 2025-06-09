@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSS Animation + localStorage Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Choose Your Theme Color</h1>
+  <button id="animateBtn">Animate Me!</button>
+  <div>
+    <label for="colorPicker">Pick a color:</label>
+    <input type="color" id="colorPicker" />
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: 50px;
+  transition: background-color 0.5s ease;
+}
+
+#animateBtn {
+  background-color: #3498db;
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+/* Animation keyframes */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Animation class */
+.bounce {
+  animation: bounce 0.6s ease;
+}
+
+
+const animateBtn = document.getElementById('animateBtn');
+const colorPicker = document.getElementById('colorPicker');
+
+// Load saved theme color from localStorage
+const savedColor = localStorage.getItem('themeColor');
+if (savedColor) {
+  document.body.style.backgroundColor = savedColor;
+  colorPicker.value = savedColor;
+}
+
+// When the button is clicked, trigger animation
+animateBtn.addEventListener('click', () => {
+  animateBtn.classList.add('bounce');
+
+  // Remove animation class after it finishes to allow repeat
+  animateBtn.addEventListener('animationend', () => {
+    animateBtn.classList.remove('bounce');
+  }, { once: true });
+});
+
+// When user picks a new color, update background and save it
+colorPicker.addEventListener('input', (event) => {
+  const chosenColor = event.target.value;
+  document.body.style.backgroundColor = chosenColor;
+  localStorage.setItem('themeColor', chosenColor);
+});
+
+
+
